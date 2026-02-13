@@ -1,7 +1,17 @@
 import { motion } from 'framer-motion'
-import { FaHeart } from 'react-icons/fa'
+import { FaHeart, FaChevronDown } from 'react-icons/fa'
 
-const Hero = ({ onSurpriseClick }) => {
+const Hero = ({ onSurpriseClick, showSurprise }) => {
+  const handleSurpriseClick = () => {
+    onSurpriseClick()
+    // Smooth scroll to next section after a short delay
+    setTimeout(() => {
+      window.scrollTo({
+        top: window.innerHeight,
+        behavior: 'smooth'
+      })
+    }, 1000)
+  }
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
       <div className="text-center z-10">
@@ -38,13 +48,34 @@ const Hero = ({ onSurpriseClick }) => {
           transition={{ duration: 1, delay: 1.5 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          onClick={onSurpriseClick}
+          onClick={handleSurpriseClick}
           className="bg-gradient-to-r from-pink-500 to-red-500 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-[0_8px_16px_rgba(0,0,0,0.6)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.8)] transition-all flex items-center gap-3 mx-auto"
         >
           <FaHeart className="animate-pulse" />
           Click for a Surprise
           <FaHeart className="animate-pulse" />
         </motion.button>
+        
+        {/* Scroll indicator - shows after surprise is clicked */}
+        {showSurprise && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="mt-12 flex flex-col items-center"
+          >
+            <p className="text-white text-lg mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              Scroll down for your surprise! 💕
+            </p>
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="text-white text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+            >
+              <FaChevronDown />
+            </motion.div>
+          </motion.div>
+        )}
       </div>
       
       {/* Animated background hearts */}
